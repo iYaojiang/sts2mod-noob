@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://bkcqu0mog15kr"]
+
+[ext_resource type="Texture2D" uid="uid://c0m8dcw4op6mj" path="res://image/atlases/aliang_noob_ice_outline.png" id="1_f35lt"]
+
+[resource]
+atlas = ExtResource("1_f35lt")
+region = Rect2(-1.0149994, -0.20599365, 129.68275, 127.57978)

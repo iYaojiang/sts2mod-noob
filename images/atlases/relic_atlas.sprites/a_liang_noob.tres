@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://uui43v6leenh"]
+
+[ext_resource type="Texture2D" uid="uid://dr6wvdo0nvfpn" path="res://image/atlases/aliang_noob_ice.png" id="1_l2la1"]
+
+[resource]
+atlas = ExtResource("1_l2la1")
+region = Rect2(-0.32922363, -0.13677979, 127.93027, 126.8788)
+margin = Rect2(1, 2, 3, 4)

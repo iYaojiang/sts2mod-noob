@@ -1,0 +1,5 @@
+{
+	"A_LIANG_NOOB.description": "一共具有[blue]{NoDeathTimes}[/blue]次复活机会，每次复活都会更强大！复活后，受到伤害会获得最大生命值。每次复活，将会获得更多[gold]力量[/gold]、[gold]敏捷[/gold]、{Energy:energyIcons()}。",
+	"A_LIANG_NOOB.flavor": "[red]嫌老子菜，还嫌不嫌？说话！[/red]",
+	"A_LIANG_NOOB.title": "永冻"
+}
