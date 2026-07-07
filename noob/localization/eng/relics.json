@@ -1,5 +1,5 @@
 {
-	"A_LIANG_NOOB.description": "You have [blue]{NoDeathTimes}[/blue] total resurrection charges, and you grow stronger each time you revive! After reviving, you gain Max HP whenever you take damage. Every resurrection grants extra [gold]Strength[/gold], [gold]Dexterity[/gold], and {Energy:energyIcons()}.",
+	"A_LIANG_NOOB.description": "You have [blue]{NoDeathTimes}[/blue] total resurrection charges, and you grow stronger each time you revive! After reviving, you gain Max HP whenever you take damage. Every resurrection grants extra [blue]{Power}[/blue] [gold]Strength[/gold], [blue]{Power}[/blue] [gold]Dexterity[/gold], and {Energy:energyIcons()}.",
 	"A_LIANG_NOOB.flavor": "[red]You think I’m weak? Spit it out![/red]",
 	"A_LIANG_NOOB.title": "Permafrost"
 }

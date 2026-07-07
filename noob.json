@@ -1,0 +1,12 @@
+{
+	"id": "noob",
+	"name": "noob",
+	"author": "aliang",
+	"description": "auto win。添加了一个遗物，使你复活3次，且复活后更强大。",
+	"version": "V2.0.3",
+	"has_pck": true,
+	"has_dll": true,
+	"dependencies": [],
+	"affects_gameplay": false,
+	"min_game_version": "0.107.0"
+}

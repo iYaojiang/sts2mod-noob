@@ -1,10 +1,6 @@
-﻿using Godot;
-using MegaCrit.Sts2.Core.Combat;
-using MegaCrit.Sts2.Core.Entities.Players;
+﻿using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
 
@@ -35,7 +31,7 @@ public sealed class ALiangNoob : RelicModel
 
     public override bool ShowCounter => true;
 
-    public override int DisplayAmount => MaxUseTimes - UseCount;
+    public override int DisplayAmount => MaxUseTimes - ALiangNoobUseCount;
 
     // 4. 回血比例改为100%（替换原50m）
     protected override IEnumerable<DynamicVar> CanonicalVars {
@@ -43,13 +39,14 @@ public sealed class ALiangNoob : RelicModel
         {
             new HealVar(100m), 
             new DynamicVar("NoDeathTimes", 3m),
-            new EnergyVar(1)
+            new EnergyVar(0),
+            new DynamicVar("Power", 0m)
         }.AsReadOnly(); }
     }
 
     // 5. 保存使用次数（替换原WasUsed），加[SavedProperty]确保存档保留
     [SavedProperty]
-    public int UseCount
+    public int ALiangNoobUseCount
     {
         get
         {
@@ -84,8 +81,12 @@ public sealed class ALiangNoob : RelicModel
     public override async Task AfterPreventingDeath(Creature creature)
     {
         Flash(); // 保留视觉特效
-        UseCount += 1; // 每次复活次数+1（替代原WasUsed=true）
+        ALiangNoobUseCount += 1; // 每次复活次数+1（替代原WasUsed=true）
         InvokeDisplayAmountChanged();
+        
+        DynamicVars["NoDeathTimes"].BaseValue = MaxUseTimes - ALiangNoobUseCount;
+        DynamicVars["Power"].BaseValue = CalculatePower();
+        base.DynamicVars.Energy.BaseValue = CalculatePower();
         
         // 计算100%最大生命值，至少回1点（避免极端情况）
         decimal amount = Math.Max(1m, (decimal)creature.MaxHp * (base.DynamicVars.Heal.BaseValue / 100m));
@@ -96,10 +97,10 @@ public sealed class ALiangNoob : RelicModel
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
     {
-        if (player == base.Owner && UseCount >= 1)
+        if (player == base.Owner && ALiangNoobUseCount >= 1)
         {
             Flash();
-            var power = UseCount * UseCount;
+            var power = CalculatePower();
             await PowerCmd.Apply<StrengthPower>(choiceContext, base.Owner.Creature, power, base.Owner.Creature, null);
             await PowerCmd.Apply<DexterityPower>(choiceContext, base.Owner.Creature, power, base.Owner.Creature, null);
             
@@ -109,24 +110,34 @@ public sealed class ALiangNoob : RelicModel
     public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target, DamageResult result, ValueProp props,
         Creature dealer, CardModel cardSource)
     {
-        if (UseCount >= 1)
+        if (ALiangNoobUseCount >= 1)
         {
-            if (target == base.Owner.Creature && dealer != null)
+            if (target == base.Owner.Creature && dealer != null && dealer.IsEnemy && props.IsPoweredAttack())
             {
                 Flash();
                 await CreatureCmd.GainMaxHp(target, 1m);
-                await CreatureCmd.LoseMaxHp(choiceContext, dealer, 1m, false);
             }
         }
     }
     
     public override decimal ModifyMaxEnergy(Player player, decimal amount)
     {
-        if (player != base.Owner && UseCount < 1)
+        if (player == base.Owner && ALiangNoobUseCount >= 1)
         {
-            return amount;
+            var power = CalculatePower();
+            return amount + (decimal)power;
         }
-        var power = UseCount * UseCount;
-        return amount + (decimal)power;
+        
+        return amount;
+    }
+
+    private decimal CalculatePower()
+    {
+        var power = 1;
+        for (var i = 0; i < ALiangNoobUseCount; i++)
+        {
+            power *= ALiangNoobUseCount;
+        }
+        return power;
     }
 }
